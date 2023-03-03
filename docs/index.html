@@ -6,13 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="">
     <link rel="stylesheet" href="css/style.min.css">
-    <title></title>
+    <title>Стажировка ВК - Сапёр</title>
   </head>
   <body>
-    <header></header>
-    <main>
-    </main>
-    <footer></footer>
+    <div class="wrapper">
+      <header></header>
+      <main class="main-index">
+        <h1 class="visually-hidden">Главная страница</h1>
+        <section class="sapper">
+          <div class="sapper__container container">
+            <h2 class="visually-hidden">Игра "Сапёр"</h2>
+            <div class="sapper__info">
+              <div class="sapper__counter-bombs bombs">
+                <span class="visually-hidden">Счетчик оставшихся мин</span>
+                <div class="bombs__0"></div>
+                <div class="bombs__4"></div>
+                <div class="bombs__0"></div>
+              </div>
+              <button class="sapper__play sapper__play--start">
+                <span class="visually-hidden">Начать игру</span>
+              </button>
+              <div class="sapper__time time">
+                <span class="visually-hidden">Секундомер</span>
+                <div class="time__0"></div>
+                <div class="time__0"></div>
+                <div class="time__0"></div>
+              </div>
+            </div>
+            <div class="sapper__field field"></div>
+          </div>
+        </section>
+      </main>
+      <footer></footer>
+    </div>
+    <template id="field-cell">
+      <button class="field__cell field__cell--closed">
+        <span class="visually-hidden">Ячейка поля</span>
+      </button>
+    </template>
     <script src="js/main.min.js"></script>
   </body>
 </html>

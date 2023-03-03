@@ -1,0 +1,56 @@
+.bombs {
+  background-color: $color-default-black;
+  width: 73px;
+  height: 45px;
+  border: 1px solid $color-default-black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bombs div {
+  width: 24px;
+  height: 44px;
+  background-image: url("../img/sprite@2.png");
+  background-repeat: no-repeat;
+}
+
+.bombs__0 {
+  background-position: -252px 0;
+}
+
+.bombs__1 {
+  background-position: 0 0;
+}
+
+.bombs__2 {
+  background-position: -28px 0;
+}
+
+.bombs__3 {
+  background-position: -56px 0;
+}
+
+.bombs__4 {
+  background-position: -84px 0;
+}
+
+.bombs__5 {
+  background-position: -112px 0;
+}
+
+.bombs__6 {
+  background-position: -140px 0;
+}
+
+.bombs__7 {
+  background-position: -168px 0;
+}
+
+.bombs__8 {
+  background-position: -196px 0;
+}
+
+.bombs__9 {
+  background-position: -224px 0;
+}
