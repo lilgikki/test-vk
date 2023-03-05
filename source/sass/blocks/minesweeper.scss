@@ -1,8 +1,8 @@
-.sapper {
+.minesweeper {
   margin: auto;
 }
 
-.sapper__container {
+.minesweeper__container {
   background-color: $color-light-gray;
   width: 556px;
   height: 640px;
@@ -17,7 +17,7 @@
   align-items: center;
 }
 
-.sapper__info {
+.minesweeper__info {
   padding: 8px 12px;
   display: flex;
   justify-content: space-between;
@@ -30,7 +30,7 @@
   border-top: solid 4px $color-dark-gray;
 }
 
-.sapper__field {
+.minesweeper__field {
   box-sizing: border-box;
   width: 520px;
   height: 520px;
@@ -39,7 +39,7 @@
   border-top: solid 4px $color-dark-gray;
 }
 
-.sapper__play {
+.minesweeper__play {
   cursor: pointer;
   border: none;
   background-color: $color-default-white;
@@ -50,22 +50,22 @@
   background-repeat: no-repeat;
 }
 
-.sapper__play--start {
+.minesweeper__play--start {
   background-position: -1px -49px;
 }
 
-.sapper__play--start:hover {
+.minesweeper__play--start:hover {
   background-position: -55px -49px;
 }
 
-.sapper__play--scary {
+.minesweeper__play--scary {
   background-position: -109px -49px;
 }
 
-.sapper__play--happy {
+.minesweeper__play--happy {
   background-position: -163px -49px;
 }
 
-.sapper__play--dead {
+.minesweeper__play--dead {
   background-position: -217px -49px;
 }

@@ -5,7 +5,7 @@ const FIELD__SIZE = 16;
 const BOMBS_COUNT = 40;
 
 const field = document.querySelector('.field');
-const playButton = document.querySelector('.sapper__play');
+const playButton = document.querySelector('.minesweeper__play');
 
 let openCells = 0;
 let firstClick = true;
@@ -13,31 +13,31 @@ let gameActive = false;
 
 // Испуганный смайлик
 const scaryEmoji = (cell) => {
-  if (playButton.classList.contains('sapper__play--start') && cell) {
-    playButton.classList.remove('sapper__play--start');
-    playButton.classList.add('sapper__play--scary');
+  if (playButton.classList.contains('minesweeper__play--start') && cell) {
+    playButton.classList.remove('minesweeper__play--start');
+    playButton.classList.add('minesweeper__play--scary');
   }
 };
 
 // Обычный смайлик
 const basicEmoji = () => {
   playButton.removeAttribute('class');
-  playButton.classList.add('sapper__play');
-  playButton.classList.add('sapper__play--start');
+  playButton.classList.add('minesweeper__play');
+  playButton.classList.add('minesweeper__play--start');
 };
 
 // "Мертвый" смайлик
 const deadEmoji = () => {
-  playButton.classList.remove('sapper__play--scary');
-  playButton.classList.remove('sapper__play--start');
-  playButton.classList.add('sapper__play--dead');
+  playButton.classList.remove('minesweeper__play--scary');
+  playButton.classList.remove('minesweeper__play--start');
+  playButton.classList.add('minesweeper__play--dead');
 };
 
 // Счастливый смайлик
 const happyEmoji = () => {
-  playButton.classList.remove('sapper__play--scary');
-  playButton.classList.remove('sapper__play--start');
-  playButton.classList.add('sapper__play--happy');
+  playButton.classList.remove('minesweeper__play--scary');
+  playButton.classList.remove('minesweeper__play--start');
+  playButton.classList.add('minesweeper__play--happy');
 };
 
 // Рандомные одномерные координаты бомб
