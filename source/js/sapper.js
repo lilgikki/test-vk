@@ -166,7 +166,7 @@ const activateCell = () => {
   const gameLoss = () => {
     // Открываю все бомбы
     for (let o = 0; o < 256; o++) {
-      if (cells[o].classList.contains('field__cell--closed') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
+      if (cells[o].classList.contains('field__cell--closed') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9 || cells[o].classList.contains('field__cell--quest') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
         cells[o].classList.remove('field__cell--closed');
         cells[o].classList.add('field__cell--bomb');
       } else if (cells[o].classList.contains('field__cell--flag') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
