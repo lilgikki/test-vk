@@ -130,10 +130,10 @@ const activateCell = () => {
     // Очищение времени и количество бомб
     clearTime();
     timeZero();
-    countBombs = 40;
+    countBombs = BOMBS_COUNT;
     bombsCounter(countBombs);
     // Закрытие всех ячеек
-    for (let o = 0; o < 256; o++) {
+    for (let o = 0; o < FIELD__SIZE*FIELD__SIZE; o++) {
       cells[o].removeAttribute('class');
       cells[o].classList.add('field__cell');
       cells[o].classList.add('field__cell--closed');
@@ -148,10 +148,10 @@ const activateCell = () => {
     openCells = 0;
     // Очищаю кол-во бомб и останавливаю время
     bombsCounter(0);
-    countBombs = 40;
+    countBombs = BOMBS_COUNT;
     clearTime();
     // Перевожу оставшиеся закрытые ячейки с бомбами в статус "флажок"
-    for (let o = 0; o < 256; o++) {
+    for (let o = 0; o < FIELD__SIZE*FIELD__SIZE; o++) {
       if (cells[o].classList.contains('field__cell--closed') || cells[o].classList.contains('field__cell--quest')) {
         cells[o].classList.remove('field__cell--closed');
         cells[o].classList.remove('field__cell--quest');
@@ -164,7 +164,7 @@ const activateCell = () => {
   // Проигрыш
   const gameLoss = () => {
     // Открываю все бомбы
-    for (let o = 0; o < 256; o++) {
+    for (let o = 0; o < FIELD__SIZE*FIELD__SIZE; o++) {
       if (cells[o].classList.contains('field__cell--closed') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9 || cells[o].classList.contains('field__cell--quest') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
         cells[o].classList.remove('field__cell--closed');
         cells[o].classList.add('field__cell--bomb');
