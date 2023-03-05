@@ -29,14 +29,12 @@ const basicEmoji = () => {
 // "Мертвый" смайлик
 const deadEmoji = () => {
   playButton.classList.remove('minesweeper__play--scary');
-  playButton.classList.remove('minesweeper__play--start');
   playButton.classList.add('minesweeper__play--dead');
 };
 
 // Счастливый смайлик
 const happyEmoji = () => {
   playButton.classList.remove('minesweeper__play--scary');
-  playButton.classList.remove('minesweeper__play--start');
   playButton.classList.add('minesweeper__play--happy');
 };
 
@@ -158,6 +156,7 @@ const activateCell = () => {
         cells[o].classList.add('field__cell--flag');
       }
     }
+    happyEmoji();
     gameActive = false;
   };
 
