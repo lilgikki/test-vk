@@ -1,5 +1,5 @@
 import {changeTime, clearTime, timeZero} from './time.js';
-import {bombsCounter} from './bombs.js';
+import {bombsCounter, resetBombs} from './bombs.js';
 
 const FIELD__SIZE = 16;
 const BOMBS_COUNT = 40;
@@ -129,7 +129,7 @@ const activateCell = () => {
     clearTime();
     timeZero();
     countBombs = BOMBS_COUNT;
-    bombsCounter(countBombs);
+    resetBombs();
     // Закрытие всех ячеек
     for (let o = 0; o < FIELD__SIZE*FIELD__SIZE; o++) {
       cells[o].removeAttribute('class');
