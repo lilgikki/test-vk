@@ -1,5 +1,5 @@
 import {changeTime, clearTime, timeZero} from './time.js';
-import {bombsCounter, bombsZero} from './bombs.js';
+import {bombsCounter} from './bombs.js';
 
 const FIELD__SIZE = 16;
 const BOMBS_COUNT = 40;
@@ -51,8 +51,11 @@ const generateArrayRandomNumber = (min, max, firstNum) => {
   while (arrayRandomNumbers.length < BOMBS_COUNT) {
     tempRandomNumber = Math.round(Math.random() * (arrayTotalNumbers.length - 1));
 
-    // Условие того, бомба не поставится на первую нажаю ячейку или на ее соседей
-    const emptyFirstClick = (arrayTotalNumbers[tempRandomNumber] !== firstNum) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1 + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1 + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1 - FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1 - FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - FIELD__SIZE));
+    // Условие того, бомба не поставится на первую нажаю ячейку или не станет соседкой этой ячейки
+    // const emptyFirstClick = (arrayTotalNumbers[tempRandomNumber] !== firstNum) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1 + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1 + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - 1 - FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum + 1 - FIELD__SIZE)) && (arrayTotalNumbers[tempRandomNumber] !== (firstNum - FIELD__SIZE));
+
+    // Условие того, что бомба не поставится на первую нажаю ячейку
+    const emptyFirstClick = arrayTotalNumbers[tempRandomNumber] !== firstNum;
     // Бомба не попадает на первую ячейке или на ее соседей, то она записывается в массив "бомб"
     if (emptyFirstClick) {
       arrayRandomNumbers.push(arrayTotalNumbers[tempRandomNumber]);
@@ -124,33 +127,29 @@ const activateCell = () => {
         arrChecked[o][p] = 0;
       }
     }
-
     // Очищение времени и количество бомб
     clearTime();
     timeZero();
-
     countBombs = 40;
-    bombsZero();
-
+    bombsCounter(countBombs);
     // Закрытие всех ячеек
     for (let o = 0; o < 256; o++) {
       cells[o].removeAttribute('class');
       cells[o].classList.add('field__cell');
       cells[o].classList.add('field__cell--closed');
     }
-
     basicEmoji();
     firstClick = true;
     gameActive = false;
   };
 
+  // Победа в игре
   const gameWin = () => {
     openCells = 0;
     // Очищаю кол-во бомб и останавливаю время
     bombsCounter(0);
     countBombs = 40;
     clearTime();
-
     // Перевожу оставшиеся закрытые ячейки с бомбами в статус "флажок"
     for (let o = 0; o < 256; o++) {
       if (cells[o].classList.contains('field__cell--closed') || cells[o].classList.contains('field__cell--quest')) {
@@ -159,10 +158,10 @@ const activateCell = () => {
         cells[o].classList.add('field__cell--flag');
       }
     }
-
     gameActive = false;
   };
 
+  // Проигрыш
   const gameLoss = () => {
     // Открываю все бомбы
     for (let o = 0; o < 256; o++) {
@@ -176,15 +175,12 @@ const activateCell = () => {
     }
     deadEmoji();
     clearTime();
-
     gameActive = false;
   };
 
   cells.forEach((cell, i) => {
-
     // Клик на ячейку
     const clickCell = () => {
-
       // Открытие ячейки, в соотсветсвие с ее значeнием в массиве и ее соседями
       const showCell = (a, x, y) => {
         switch(a[x][y]) {
@@ -258,7 +254,6 @@ const activateCell = () => {
         }
         return;
       };
-
       // Открытие соседних пустых ячеек
       const showEmptyNeighbours = (a, x, y) => {
         if (x > 0 && arrChecked[x-1][y] == 0 && (cells[(x-1)*FIELD__SIZE + y].classList.contains('field__cell--closed'))) {
@@ -268,6 +263,24 @@ const activateCell = () => {
           arrChecked[x-1][y] = 1;
           if (a[x-1][y] == 0) {
             showEmptyNeighbours(a, x-1, y);
+          }
+        }
+        if (x > 0 && y > 0 && arrChecked[x-1][y-1] == 0 && (cells[(x-1)*FIELD__SIZE + (y-1)].classList.contains('field__cell--closed'))) {
+          cells[(x-1)*FIELD__SIZE + (y-1)].classList.remove('field__cell--closed');
+          cells[(x-1)*FIELD__SIZE + (y-1)].classList.remove('field__cell--quest');
+          showCell(a, x-1, y-1);
+          arrChecked[x-1][y-1] = 1;
+          if (a[x-1][y-1] == 0) {
+            showEmptyNeighbours(a, x-1, y-1);
+          }
+        }
+        if (x > 0 && y < FIELD__SIZE - 1 && arrChecked[x-1][y+1] == 0 && (cells[(x-1)*FIELD__SIZE + (y+1)].classList.contains('field__cell--closed'))) {
+          cells[(x-1)*FIELD__SIZE + (y+1)].classList.remove('field__cell--closed');
+          cells[(x-1)*FIELD__SIZE + (y+1)].classList.remove('field__cell--quest');
+          showCell(a, x-1, y+1);
+          arrChecked[x-1][y+1] = 1;
+          if (a[x-1][y+1] == 0) {
+            showEmptyNeighbours(a, x-1, y+1);
           }
         }
         if (y > 0 && arrChecked[x][y-1] == 0 && (cells[x*FIELD__SIZE + (y-1)].classList.contains('field__cell--closed'))) {
@@ -297,6 +310,24 @@ const activateCell = () => {
             showEmptyNeighbours(a, x+1, y);
           }
         }
+        if (x < FIELD__SIZE - 1 && y > 0 && arrChecked[x+1][y-1] == 0 && (cells[(x+1)*FIELD__SIZE + (y-1)].classList.contains('field__cell--closed'))) {
+          cells[(x+1)*FIELD__SIZE + (y-1)].classList.remove('field__cell--closed');
+          cells[(x+1)*FIELD__SIZE + (y-1)].classList.remove('field__cell--quest');
+          showCell(a, x+1, y-1);
+          arrChecked[x+1][y-1] = 1;
+          if (a[x+1][y-1] == 0) {
+            showEmptyNeighbours(a, x+1, y-1);
+          }
+        }
+        if (x < FIELD__SIZE - 1 && y < FIELD__SIZE - 1 && arrChecked[x+1][y+1] == 0 && (cells[(x+1)*FIELD__SIZE + (y+1)].classList.contains('field__cell--closed'))) {
+          cells[(x+1)*FIELD__SIZE + (y+1)].classList.remove('field__cell--closed');
+          cells[(x+1)*FIELD__SIZE + (y+1)].classList.remove('field__cell--quest');
+          showCell(a, x+1, y+1);
+          arrChecked[x+1][y+1] = 1;
+          if (a[x+1][y+1] == 0) {
+            showEmptyNeighbours(a, x+1, y+1);
+          }
+        }
         return;
       };
 
@@ -314,10 +345,9 @@ const activateCell = () => {
         changeTime();
       }
 
+      // Открытие ячейки
       if (gameActive) {
         basicEmoji();
-
-        // Открытие ячейки
         if (cell.classList.contains('field__cell--closed')) {
           const n = Math.floor(i / FIELD__SIZE);
           const m = i % FIELD__SIZE;
@@ -331,6 +361,7 @@ const activateCell = () => {
       }
     };
 
+    // Установка\Снятие флага или знака вопроса
     const getFlag = () => {
       if (cell.classList.contains('field__cell--closed') && gameActive == true) {
         cell.classList.remove('field__cell--closed');
@@ -348,10 +379,12 @@ const activateCell = () => {
       }
     }
 
+    // Убираю появление меню, при клике правой кнопки мыши по ячейке
     cell.addEventListener('contextmenu', (e) => {
       e.preventDefault();
     })
 
+    // Клик на ячейку
     cell.addEventListener('mouseup', (e) => {
       e.preventDefault();
       if (e.button == 2) {
@@ -361,6 +394,7 @@ const activateCell = () => {
       }
     })
 
+    // Зажатие ячейки, для появления испуганного эмодзи
     cell.addEventListener('mousedown', (e) => {
       e.preventDefault();
       if (e.button == 0) {
@@ -368,6 +402,7 @@ const activateCell = () => {
       }
     });
 
+    // Рестарт игры
     playButton.addEventListener('click', clearGame);
   })
 };

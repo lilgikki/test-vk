@@ -3,6 +3,7 @@ const timeBlocks = time.querySelectorAll('.time__0')
 
 let timeSec, time10Sec, time100Sec;
 
+// Возвращение к начальному значению таймера
 const timeZero = () => {
   for (let i = 0; i < 3; i++) {
     timeBlocks[i].removeAttribute('class');
@@ -10,6 +11,7 @@ const timeZero = () => {
   }
 };
 
+// Таймер
 const setNum = (block) => {
   if (block.classList.contains('time__0')) {
     block.classList.add('time__1')
