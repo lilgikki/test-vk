@@ -1,6 +1,15 @@
 const time = document.querySelector('.time');
 const timeBlocks = time.querySelectorAll('.time__0')
 
+let timeSec, time10Sec, time100Sec;
+
+const timeZero = () => {
+  for (let i = 0; i < 3; i++) {
+    timeBlocks[i].removeAttribute('class');
+    timeBlocks[i].classList.add('time__0');
+  }
+};
+
 const setNum = (block) => {
   if (block.classList.contains('time__0')) {
     block.classList.add('time__1')
@@ -45,9 +54,15 @@ const setNum = (block) => {
 };
 
 const changeTime = () => {
-  setInterval(setNum, 1000, timeBlocks[2]);
-  setInterval(setNum, 10000, (timeBlocks[1]));
-  setInterval(setNum, 100000, (timeBlocks[0]));
+  timeSec = setInterval(setNum, 1000, timeBlocks[2]);
+  time10Sec = setInterval(setNum, 10000, (timeBlocks[1]));
+  time100Sec = setInterval(setNum, 100000, (timeBlocks[0]));
 };
 
-export {changeTime};
+const clearTime = () => {
+  clearInterval(timeSec);
+  clearInterval(time10Sec);
+  clearInterval(time100Sec);
+};
+
+export {changeTime, clearTime, timeZero};

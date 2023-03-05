@@ -1,5 +1,5 @@
-import {changeTime} from './time.js';
-import {bombsCounter} from './bombs.js';
+import {changeTime, clearTime, timeZero} from './time.js';
+import {bombsCounter, bombsZero} from './bombs.js';
 
 const FIELD__SIZE = 16;
 const BOMBS_COUNT = 40;
@@ -7,8 +7,38 @@ const BOMBS_COUNT = 40;
 const field = document.querySelector('.field');
 const playButton = document.querySelector('.sapper__play');
 
+let openCells = 0;
 let firstClick = true;
 let gameActive = false;
+
+// Испуганный смайлик
+const scaryEmoji = (cell) => {
+  if (playButton.classList.contains('sapper__play--start') && cell) {
+    playButton.classList.remove('sapper__play--start');
+    playButton.classList.add('sapper__play--scary');
+  }
+};
+
+// Обычный смайлик
+const basicEmoji = () => {
+  playButton.removeAttribute('class');
+  playButton.classList.add('sapper__play');
+  playButton.classList.add('sapper__play--start');
+};
+
+// "Мертвый" смайлик
+const deadEmoji = () => {
+  playButton.classList.remove('sapper__play--scary');
+  playButton.classList.remove('sapper__play--start');
+  playButton.classList.add('sapper__play--dead');
+};
+
+// Счастливый смайлик
+const happyEmoji = () => {
+  playButton.classList.remove('sapper__play--scary');
+  playButton.classList.remove('sapper__play--start');
+  playButton.classList.add('sapper__play--happy');
+};
 
 // Рандомные одномерные координаты бомб
 const generateArrayRandomNumber = (min, max, firstNum) => {
@@ -82,14 +112,75 @@ const activateCell = () => {
   let arrChecked = [];
   const cells = field.querySelectorAll('.field__cell');
 
-  cells.forEach((cell, i) => {
-    // Испуганный смайлик
-    const scaryEmoji = () => {
-      if (playButton.classList.contains('sapper__play--start') && cell.classList.contains('field__cell--closed')) {
-        playButton.classList.remove('sapper__play--start');
-        playButton.classList.add('sapper__play--scary');
+  // Рестарт игры
+  const clearGame = () => {
+    openCells = 0;
+    // Очищаем массив ячеек и массив проверенных ячеек
+    for (let o = 0; o < FIELD__SIZE; o++) {
+      arr[o] = [];
+      arrChecked[o] = [];
+      for (let p = 0; p < FIELD__SIZE; p++) {
+        arr[o][p] = 0;
+        arrChecked[o][p] = 0;
       }
-    };
+    }
+
+    // Очищение времени и количество бомб
+    clearTime();
+    timeZero();
+
+    countBombs = 40;
+    bombsZero();
+
+    // Закрытие всех ячеек
+    for (let o = 0; o < 256; o++) {
+      cells[o].removeAttribute('class');
+      cells[o].classList.add('field__cell');
+      cells[o].classList.add('field__cell--closed');
+    }
+
+    basicEmoji();
+    firstClick = true;
+    gameActive = false;
+  };
+
+  const gameWin = () => {
+    openCells = 0;
+    // Очищаю кол-во бомб и останавливаю время
+    bombsCounter(0);
+    countBombs = 40;
+    clearTime();
+
+    // Перевожу оставшиеся закрытые ячейки с бомбами в статус "флажок"
+    for (let o = 0; o < 256; o++) {
+      if (cells[o].classList.contains('field__cell--closed') || cells[o].classList.contains('field__cell--quest')) {
+        cells[o].classList.remove('field__cell--closed');
+        cells[o].classList.remove('field__cell--quest');
+        cells[o].classList.add('field__cell--flag');
+      }
+    }
+
+    gameActive = false;
+  };
+
+  const gameLoss = () => {
+    // Открываю все бомбы
+    for (let o = 0; o < 256; o++) {
+      if (cells[o].classList.contains('field__cell--closed') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
+        cells[o].classList.remove('field__cell--closed');
+        cells[o].classList.add('field__cell--bomb');
+      } else if (cells[o].classList.contains('field__cell--flag') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
+        cells[o].classList.remove('field__cell--flag');
+        cells[o].classList.add('field__cell--bomb-flag');
+      }
+    }
+    deadEmoji();
+    clearTime();
+
+    gameActive = false;
+  };
+
+  cells.forEach((cell, i) => {
 
     // Клик на ячейку
     const clickCell = () => {
@@ -99,33 +190,70 @@ const activateCell = () => {
         switch(a[x][y]) {
           case 0:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--opened');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 1:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--1');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 2:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--2');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 3:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--3');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 4:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--4');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 5:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--5');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
             break;
           case 6:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--6');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
               break;
           case 7:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--7');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
               break;
           case 8:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--8');
+            openCells++;
+            if (openCells == FIELD__SIZE*FIELD__SIZE - BOMBS_COUNT) {
+              gameWin();
+            }
               break;
           case 9:
             cells[x*FIELD__SIZE + y].classList.add('field__cell--bomb-act');
+            gameLoss();
               break;
         }
         return;
@@ -186,37 +314,35 @@ const activateCell = () => {
         changeTime();
       }
 
-      // Смена лица на улыбающееся
-      if (playButton.classList.contains('sapper__play--scary')) {
-        playButton.classList.add('sapper__play--start');
-        playButton.classList.remove('sapper__play--scary');
-      }
+      if (gameActive) {
+        basicEmoji();
 
-      // Открытие ячейки
-      if (cell.classList.contains('field__cell--closed')) {
-        const n = Math.floor(i / FIELD__SIZE);
-        const m = i % FIELD__SIZE;
-        cell.classList.remove('field__cell--closed');
-        showCell(arr, n, m);
-        arrChecked[n][m] = 1;
-        if (arr[n][m] == 0) {
-          showEmptyNeighbours(arr, n, m);
+        // Открытие ячейки
+        if (cell.classList.contains('field__cell--closed')) {
+          const n = Math.floor(i / FIELD__SIZE);
+          const m = i % FIELD__SIZE;
+          cell.classList.remove('field__cell--closed');
+          showCell(arr, n, m);
+          arrChecked[n][m] = 1;
+          if (arr[n][m] == 0) {
+            showEmptyNeighbours(arr, n, m);
+          }
         }
       }
     };
 
     const getFlag = () => {
-      if (cell.classList.contains('field__cell--closed')) {
+      if (cell.classList.contains('field__cell--closed') && gameActive == true) {
         cell.classList.remove('field__cell--closed');
         cell.classList.add('field__cell--flag');
         countBombs--;
         bombsCounter(countBombs);
-      } else if (cell.classList.contains('field__cell--flag')) {
+      } else if (cell.classList.contains('field__cell--flag') && gameActive == true) {
         cell.classList.remove('field__cell--flag');
         cell.classList.add('field__cell--quest');
         countBombs++;
         bombsCounter(countBombs);
-      } else if (cell.classList.contains('field__cell--quest')) {
+      } else if (cell.classList.contains('field__cell--quest') && gameActive == true) {
         cell.classList.remove('field__cell--quest');
         cell.classList.add('field__cell--closed');
       }
@@ -238,11 +364,12 @@ const activateCell = () => {
     cell.addEventListener('mousedown', (e) => {
       e.preventDefault();
       if (e.button == 0) {
-        scaryEmoji();
+        scaryEmoji(cell.classList.contains('field__cell--closed'));
       }
     });
-  })
 
+    playButton.addEventListener('click', clearGame);
+  })
 };
 
 export {activateCell};

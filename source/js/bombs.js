@@ -1,6 +1,17 @@
 const bombsDiv = document.querySelector('.bombs');
 const bombs = bombsDiv.querySelectorAll('div');
 
+const bombsZero = () => {
+  for (let i = 0; i < 3; i++) {
+    bombs[i].removeAttribute('class');
+    if (i == 1) {
+      bombs[i].classList.add('bombs__4');
+    } else {
+      bombs[i].classList.add('bombs__0');
+    }
+  }
+};
+
 const setCount = (block, k) => {
   if (k == 1) {
     block.classList.remove('bombs__0');
@@ -64,4 +75,4 @@ const bombsCounter = (k) => {
   setCount(bombs[2], k1);
 };
 
-export {bombsCounter};
+export {bombsCounter, bombsZero};
