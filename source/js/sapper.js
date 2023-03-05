@@ -167,6 +167,7 @@ const activateCell = () => {
     for (let o = 0; o < FIELD__SIZE*FIELD__SIZE; o++) {
       if (cells[o].classList.contains('field__cell--closed') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9 || cells[o].classList.contains('field__cell--quest') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
         cells[o].classList.remove('field__cell--closed');
+        cells[o].classList.remove('field__cell--quest');
         cells[o].classList.add('field__cell--bomb');
       } else if (cells[o].classList.contains('field__cell--flag') && arr[Math.floor(o / FIELD__SIZE)][o % FIELD__SIZE] == 9) {
         cells[o].classList.remove('field__cell--flag');
